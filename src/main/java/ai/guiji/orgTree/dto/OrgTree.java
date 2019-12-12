@@ -14,4 +14,6 @@ public class OrgTree {
     private String code;
 
     List<OrgTree> children;
+
+    List<SubOrg> subOrgList;
 }

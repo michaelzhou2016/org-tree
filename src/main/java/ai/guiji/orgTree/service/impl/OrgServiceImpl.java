@@ -1,6 +1,7 @@
 package ai.guiji.orgTree.service.impl;
 
 import ai.guiji.orgTree.dto.OrgTree;
+import ai.guiji.orgTree.dto.SubOrg;
 import ai.guiji.orgTree.entity.SysOrganization;
 import ai.guiji.orgTree.entity.SysOrganizationExample;
 import ai.guiji.orgTree.mapper.SysOrganizationMapper;
@@ -42,11 +43,18 @@ public class OrgServiceImpl implements OrgService {
      */
     public OrgTree findChildren(OrgTree tree, List<OrgTree> list) {
         for (OrgTree vo : list) {
-            if (isChild(tree.getCode(), vo.getCode())) {
-                if (tree.getChildren() == null) {
-                    tree.setChildren(new ArrayList<>());
+            if (vo.getCode().startsWith(tree.getCode())) {
+                if (tree.getSubOrgList() == null) {
+                    tree.setSubOrgList(new ArrayList<>());
                 }
-                tree.getChildren().add(findChildren(vo, list));
+                tree.getSubOrgList().add(new SubOrg(vo.getId(), vo.getOrgName(), vo.getCode()));
+
+                if (isChild(tree.getCode(), vo.getCode())) {
+                    if (tree.getChildren() == null) {
+                        tree.setChildren(new ArrayList<>());
+                    }
+                    tree.getChildren().add(findChildren(vo, list));
+                }
             }
         }
 
