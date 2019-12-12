@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+    <properties resource="datasource.properties"/>
+    <classPathEntry location="${db.driverLocation}"/>
+    <context id="default" targetRuntime="Mybatis3">
+        <commentGenerator type="ai.guiji.orgTree.generator.MyCommentGenerator">
+            <property name="suppressDate" value="false"/>
+            <property name="suppressAllComments" value="false"/>
+            <property name="addRemarkComments" value="true"/>
+            <property name="author" value="zhouliliang"/>
+            <property name="dateFormat" value="yyyy/MM/dd"/>
+        </commentGenerator>
+        <jdbcConnection
+                driverClass="${db.driverClassName}"
+                connectionURL="${db.url}"
+                userId="${db.username}"
+                password="${db.password}">
+            <property name="useInformationSchema" value="true"/>
+        </jdbcConnection>
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="false"/>
+        </javaTypeResolver>
+
+        <javaModelGenerator targetPackage="ai.guiji.orgTree.entity" targetProject="./src/main/java"/>
+        <sqlMapGenerator targetPackage="mapper/" targetProject="./src/main/resources"/>
+        <javaClientGenerator type="XMLMAPPER" targetPackage="ai.guiji.orgTree.mapper"
+                             targetProject="./src/main/java"/>
+
+        <table tableName="sys_organization" domainObjectName="SysOrganization" enableCountByExample="true"
+               enableUpdateByExample="true"
+               enableDeleteByExample="true"
+               enableSelectByExample="true"
+               selectByExampleQueryId="false"
+        ></table>
+    </context>
+</generatorConfiguration>
