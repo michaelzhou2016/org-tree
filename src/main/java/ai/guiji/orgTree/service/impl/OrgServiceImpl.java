@@ -84,4 +84,27 @@ public class OrgServiceImpl implements OrgService {
         return false;
 
     }
+
+    /*
+        Map<String, OrgRoleInfo> map = new HashMap<>();
+		orgInfos.stream().forEach(orgInfo -> map.put(orgInfo.getOrgCode(), orgInfo));
+		Comparator<OrgRoleInfo> comparator1 = (o1, o2) -> o2.getOrgCode().split("\\.").length - o1.getOrgCode().split("\\.").length;
+		Collections.sort(orgInfos, comparator1);
+		for(OrgRoleInfo orgInfo : orgInfos)
+		{
+			String code = orgInfo.getOrgCode();
+			if(code.equals("1")){continue;}
+			String parentCode = getParentOrgCode(code);
+			if(map.containsKey(parentCode))
+			{
+				OrgRoleInfo parentOrgInfo = map.get(parentCode);
+				parentOrgInfo.addChild(orgInfo);
+				map.remove(code);
+				map.put(parentCode, parentOrgInfo);
+			}
+		}
+		Comparator<OrgRoleInfo> comparator2 = (o1, o2) -> o1.getOrgCode().split("\\.").length - o2.getOrgCode().split("\\.").length;
+		map.values().stream().forEach(orgInfo -> resultList.add(orgInfo));
+		Collections.sort(resultList, comparator2);
+     */
 }
