@@ -7,11 +7,13 @@ import ai.guiji.orgTree.entity.SysOrganizationExample;
 import ai.guiji.orgTree.mapper.SysOrganizationMapper;
 import ai.guiji.orgTree.service.OrgService;
 import ai.guiji.orgTree.utils.OrganizationConvert;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 public class OrgServiceImpl implements OrgService {
@@ -32,6 +34,51 @@ public class OrgServiceImpl implements OrgService {
         }
 
         return treeVos;
+    }
+
+    /**
+     * 获取上一级组织
+     * 系统的上一级就是自己
+     */
+    public String getParentOrgCode(String orgCode) {
+        if ("1".equals(orgCode)) {
+            return orgCode;
+        }
+
+        String parentOrgCode = orgCode.substring(0, orgCode.lastIndexOf(".")).substring(0, orgCode.substring(0, orgCode.lastIndexOf(".")).lastIndexOf(".") + 1);
+        return parentOrgCode = "1.".equals(parentOrgCode) ? "1" : parentOrgCode;
+    }
+
+    @Override
+    public List<OrgTree> getAllOrgTree2() {
+        List<SysOrganization> orgList = sysOrganizationMapper.selectByExample(new SysOrganizationExample());
+        List<OrgTree> list = OrganizationConvert.listToTreeVoList(orgList);
+
+        if (CollectionUtils.isNotEmpty(list)) {
+            Map<String, OrgTree> map = list.stream().collect(Collectors.toMap(OrgTree::getCode, Function.identity()));
+            list.forEach(orgTree -> {
+                String code = orgTree.getCode();
+                if (code.equals("1")) {
+                    return;
+                }
+
+                String parentCode = getParentOrgCode(code);
+                if (map.containsKey(parentCode)) {
+                    OrgTree parentOrg = map.get(parentCode);
+                    parentOrg.addChild(orgTree);
+                    parentOrg.addSubOrg(new SubOrg(orgTree.getId(), orgTree.getOrgName(), orgTree.getCode()));
+                    if (Objects.nonNull(orgTree.getSubOrgList())) {
+                        parentOrg.addSubOrgList(orgTree.getSubOrgList());
+                    }
+                    map.remove(code);
+                    map.put(parentCode, parentOrg);
+                }
+            });
+
+            return map.values().stream().sorted(Comparator.comparing(OrgTree::getCodeLength)).collect(Collectors.toList());
+        } else {
+            return Collections.emptyList();
+        }
     }
 
     /**

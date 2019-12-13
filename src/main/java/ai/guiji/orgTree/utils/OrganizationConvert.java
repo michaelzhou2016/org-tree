@@ -3,6 +3,7 @@ package ai.guiji.orgTree.utils;
 import ai.guiji.orgTree.dto.OrgTree;
 import ai.guiji.orgTree.entity.SysOrganization;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -13,6 +14,7 @@ public class OrganizationConvert {
         orgTree.setId(sysOrganization.getId());
         orgTree.setOrgName(sysOrganization.getName());
         orgTree.setCode(sysOrganization.getCode());
+        orgTree.setCodeLength(sysOrganization.getCode().split("\\.").length);
 
         return orgTree;
     }
@@ -22,6 +24,8 @@ public class OrganizationConvert {
             return null;
         }
 
-        return list.stream().map(sysOrganization -> entityToTreeDto(sysOrganization)).collect(Collectors.toList());
+        return list.stream().map(org -> entityToTreeDto(org))
+                .sorted(Comparator.comparing(OrgTree::getCodeLength).reversed())
+                .collect(Collectors.toList());
     }
 }

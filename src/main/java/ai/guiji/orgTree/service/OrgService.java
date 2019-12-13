@@ -7,4 +7,6 @@ import java.util.List;
 public interface OrgService {
 
     List<OrgTree> getAllOrgTree();
+
+    List<OrgTree> getAllOrgTree2();
 }
