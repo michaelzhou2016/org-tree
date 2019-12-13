@@ -45,8 +45,9 @@ public class OrgServiceImpl implements OrgService {
             return orgCode;
         }
 
-        String parentOrgCode = orgCode.substring(0, orgCode.lastIndexOf(".")).substring(0, orgCode.substring(0, orgCode.lastIndexOf(".")).lastIndexOf(".") + 1);
-        return parentOrgCode = "1.".equals(parentOrgCode) ? "1" : parentOrgCode;
+        String tripEnd = orgCode.substring(0, orgCode.lastIndexOf("."));
+        String parentOrgCode = tripEnd.substring(0, tripEnd.lastIndexOf(".") + 1);
+        return "1.".equals(parentOrgCode) ? "1" : parentOrgCode;
     }
 
     @Override
