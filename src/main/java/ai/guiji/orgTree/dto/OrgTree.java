@@ -14,7 +14,7 @@ public class OrgTree {
 
     private String code;
 
-    private Integer codeLength;
+    private Integer level;
 
     List<OrgTree> children;
 

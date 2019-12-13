@@ -76,7 +76,7 @@ public class OrgServiceImpl implements OrgService {
                 }
             });
 
-            return map.values().stream().sorted(Comparator.comparing(OrgTree::getCodeLength)).collect(Collectors.toList());
+            return map.values().stream().sorted(Comparator.comparing(OrgTree::getLevel)).collect(Collectors.toList());
         } else {
             return Collections.emptyList();
         }

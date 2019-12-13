@@ -14,7 +14,7 @@ public class OrganizationConvert {
         orgTree.setId(sysOrganization.getId());
         orgTree.setOrgName(sysOrganization.getName());
         orgTree.setCode(sysOrganization.getCode());
-        orgTree.setCodeLength(sysOrganization.getCode().split("\\.").length);
+        orgTree.setLevel(sysOrganization.getCode().split("\\.").length);
 
         return orgTree;
     }
@@ -25,7 +25,7 @@ public class OrganizationConvert {
         }
 
         return list.stream().map(org -> entityToTreeDto(org))
-                .sorted(Comparator.comparing(OrgTree::getCodeLength).reversed())
+                .sorted(Comparator.comparing(OrgTree::getLevel).reversed())
                 .collect(Collectors.toList());
     }
 }
